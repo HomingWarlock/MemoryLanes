@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Enter))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             menu_test.SetActive(false);
         }
