@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject menu_test;
+    public GameObject menuObject;
+    public GameObject maingameObjet;
 
     void Start()
     {
-        menu_test.SetActive(true);
+        menuObject.SetActive(true);
+        maingameObjet.SetActive(false);
     }
 
-    void Update()
+    public void PlayButtonClicked()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            menu_test.SetActive(false);
-        }
+        menuObject.SetActive(false);
+        maingameObjet.SetActive(true);
     }
 }

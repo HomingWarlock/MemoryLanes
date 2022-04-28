@@ -13,6 +13,7 @@ public class Player_movement : MonoBehaviour
     public float endgoal;
     public float rotategoal;
     public float rotate_direction;
+    public int new_direction;
     public bool noMove;
 
     private void Awake()
@@ -35,26 +36,50 @@ public class Player_movement : MonoBehaviour
             if (this.transform.eulerAngles.y == 0)
             {
                 endgoal = OurBody.transform.position.x - distance;
+                new_direction = 0;
             }
 
             if (this.transform.eulerAngles.y == 90)
             {
                 endgoal = OurBody.transform.position.z + distance;
+                new_direction = 90;
             }
 
             if (this.transform.eulerAngles.y == 180)
             {
                 endgoal = OurBody.transform.position.x + distance;
+                new_direction = 180;
             }
 
             if (this.transform.eulerAngles.y == 270)
             {
                 endgoal = OurBody.transform.position.z - distance;
+                new_direction = 270;
             }
         }
 
         if (Input.GetKeyDown(KeyCode.A) && !IsRotating && !IsMoving)
         {
+            if (this.transform.eulerAngles.y == 0)
+            {
+                new_direction = -90;
+            }
+
+            if (this.transform.eulerAngles.y == -90)
+            {
+                new_direction = -180;
+            }
+
+            if (this.transform.eulerAngles.y == -180)
+            {
+                new_direction = -270;
+            }
+
+            if (this.transform.eulerAngles.y == -270)
+            {
+                new_direction = -0;
+            }
+
             rotategoal = 0;
             rotate_direction = -1;
             IsRotating = true;
@@ -62,6 +87,26 @@ public class Player_movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D) && !IsRotating && !IsMoving)
         {
+            if (this.transform.eulerAngles.y == 0)
+            {
+                new_direction = 90;
+            }
+
+            if (this.transform.eulerAngles.y == 90)
+            {
+                new_direction = 180;
+            }
+
+            if (this.transform.eulerAngles.y == 180)
+            {
+                new_direction = 270;
+            }
+
+            if (this.transform.eulerAngles.y == 270)
+            {
+                new_direction = 0;
+            }
+
             rotategoal = 0;
             rotate_direction = 1;
             IsRotating = true;
@@ -73,8 +118,9 @@ public class Player_movement : MonoBehaviour
             {
                 OurBody.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0);
 
-                if (OurBody.transform.position.x <= endgoal)
+                if (OurBody.transform.position.x < endgoal)
                 {
+                    OurBody.transform.position = new Vector3(endgoal, OurBody.transform.position.y, OurBody.transform.position.z);
                     IsMoving = false;
                 }
             }
@@ -83,8 +129,9 @@ public class Player_movement : MonoBehaviour
             {
                 OurBody.transform.position += new Vector3(0, 0, 1 * speed * Time.deltaTime);
 
-                if (OurBody.transform.position.z >= endgoal)
+                if (OurBody.transform.position.z > endgoal)
                 {
+                    OurBody.transform.position = new Vector3(OurBody.transform.position.x, OurBody.transform.position.y, endgoal);
                     IsMoving = false;
                 }
             }
@@ -93,8 +140,9 @@ public class Player_movement : MonoBehaviour
             {
                 OurBody.transform.position += new Vector3(1 * speed * Time.deltaTime, 0, 0);
 
-                if (OurBody.transform.position.x >= endgoal)
+                if (OurBody.transform.position.x > endgoal)
                 {
+                    OurBody.transform.position = new Vector3(endgoal, OurBody.transform.position.y, OurBody.transform.position.z);
                     IsMoving = false;
                 }
             }
@@ -103,8 +151,9 @@ public class Player_movement : MonoBehaviour
             {
                 OurBody.transform.position += new Vector3(0, 0, -1 * speed * Time.deltaTime);
 
-                if (OurBody.transform.position.z <= endgoal)
+                if (OurBody.transform.position.z < endgoal)
                 {
+                    OurBody.transform.position = new Vector3(OurBody.transform.position.x, OurBody.transform.position.y, endgoal);
                     IsMoving = false;
                 }
             }
@@ -120,6 +169,23 @@ public class Player_movement : MonoBehaviour
             else if (rotategoal >= 90)
             {
                 IsRotating = false;
+
+                if (new_direction == 0)
+                {
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+                else if (new_direction == 90)
+                {
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
+                }
+                else if (new_direction == 180)
+                {
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+                else if (new_direction == 270)
+                {
+                    transform.rotation = Quaternion.Euler(0, 270, 0);
+                }
             }
         }
     }
