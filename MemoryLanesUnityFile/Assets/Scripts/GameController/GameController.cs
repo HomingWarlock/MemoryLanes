@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject menuObject;
-    public GameObject maingameObjet;
+    public GameObject menu_object;
+    public GameObject game_object;
 
     void Start()
     {
-        menuObject.SetActive(true);
-        maingameObjet.SetActive(false);
+        menu_object.SetActive(true);
+        game_object.SetActive(false);
     }
 
     public void PlayButtonClicked()
     {
-        menuObject.SetActive(false);
-        maingameObjet.SetActive(true);
+        menu_object.SetActive(false);
+        game_object.SetActive(true);
     }
 }

@@ -2,63 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_movement : MonoBehaviour
+public class Player_Movement : MonoBehaviour
 {
     public float speed;
     public float rotate_speed;
-    public bool IsMoving;
-    public bool IsRotating;
-    public Rigidbody OurBody;
+    public bool is_moving;
+    public bool is_rotating;
+    public Rigidbody our_body;
     public float distance;
     public float endgoal;
     public float rotategoal;
     public float rotate_direction;
     public int new_direction;
-    public bool noMove;
+    public bool no_move;
 
     private void Awake()
     {
         speed = 2;
         rotate_speed = 200;
-        IsMoving = false;
-        IsRotating = false;
-        OurBody = this.GetComponent<Rigidbody>();
+        is_moving = false;
+        is_rotating = false;
+        our_body = this.GetComponent<Rigidbody>();
         distance = 5;
-        noMove = false;
+        no_move = false;
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.W) && !IsMoving && !noMove && !IsRotating)
+        if (Input.GetKey(KeyCode.W) && !is_moving && !no_move && !is_rotating)
         {
-            IsMoving = true;
+            is_moving = true;
 
             if (this.transform.eulerAngles.y == 0)
             {
-                endgoal = OurBody.transform.position.x - distance;
+                endgoal = our_body.transform.position.x - distance;
                 new_direction = 0;
             }
 
             if (this.transform.eulerAngles.y == 90)
             {
-                endgoal = OurBody.transform.position.z + distance;
+                endgoal = our_body.transform.position.z + distance;
                 new_direction = 90;
             }
 
             if (this.transform.eulerAngles.y == 180)
             {
-                endgoal = OurBody.transform.position.x + distance;
+                endgoal = our_body.transform.position.x + distance;
                 new_direction = 180;
             }
 
             if (this.transform.eulerAngles.y == 270)
             {
-                endgoal = OurBody.transform.position.z - distance;
+                endgoal = our_body.transform.position.z - distance;
                 new_direction = 270;
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.A) && !IsRotating && !IsMoving)
+        if (Input.GetKeyDown(KeyCode.A) && !is_rotating && !is_moving)
         {
             if (this.transform.eulerAngles.y == 0)
             {
@@ -82,10 +82,10 @@ public class Player_movement : MonoBehaviour
 
             rotategoal = 0;
             rotate_direction = -1;
-            IsRotating = true;
+            is_rotating = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && !IsRotating && !IsMoving)
+        if (Input.GetKeyDown(KeyCode.D) && !is_rotating && !is_moving)
         {
             if (this.transform.eulerAngles.y == 0)
             {
@@ -109,57 +109,57 @@ public class Player_movement : MonoBehaviour
 
             rotategoal = 0;
             rotate_direction = 1;
-            IsRotating = true;
+            is_rotating = true;
         }
 
-        if (IsMoving)
+        if (is_moving)
         {
-            if (this.transform.eulerAngles.y == 0 && OurBody.transform.position.x >= endgoal)
+            if (this.transform.eulerAngles.y == 0 && our_body.transform.position.x >= endgoal)
             {
-                OurBody.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0);
+                our_body.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0);
 
-                if (OurBody.transform.position.x < endgoal)
+                if (our_body.transform.position.x < endgoal)
                 {
-                    OurBody.transform.position = new Vector3(endgoal, OurBody.transform.position.y, OurBody.transform.position.z);
-                    IsMoving = false;
+                    our_body.transform.position = new Vector3(endgoal, our_body.transform.position.y, our_body.transform.position.z);
+                    is_moving = false;
                 }
             }
 
-            if (this.transform.eulerAngles.y == 90 && OurBody.transform.position.z <= endgoal)
+            if (this.transform.eulerAngles.y == 90 && our_body.transform.position.z <= endgoal)
             {
-                OurBody.transform.position += new Vector3(0, 0, 1 * speed * Time.deltaTime);
+                our_body.transform.position += new Vector3(0, 0, 1 * speed * Time.deltaTime);
 
-                if (OurBody.transform.position.z > endgoal)
+                if (our_body.transform.position.z > endgoal)
                 {
-                    OurBody.transform.position = new Vector3(OurBody.transform.position.x, OurBody.transform.position.y, endgoal);
-                    IsMoving = false;
+                    our_body.transform.position = new Vector3(our_body.transform.position.x, our_body.transform.position.y, endgoal);
+                    is_moving = false;
                 }
             }
 
-            if (this.transform.eulerAngles.y == 180 && OurBody.transform.position.x <= endgoal)
+            if (this.transform.eulerAngles.y == 180 && our_body.transform.position.x <= endgoal)
             {
-                OurBody.transform.position += new Vector3(1 * speed * Time.deltaTime, 0, 0);
+                our_body.transform.position += new Vector3(1 * speed * Time.deltaTime, 0, 0);
 
-                if (OurBody.transform.position.x > endgoal)
+                if (our_body.transform.position.x > endgoal)
                 {
-                    OurBody.transform.position = new Vector3(endgoal, OurBody.transform.position.y, OurBody.transform.position.z);
-                    IsMoving = false;
+                    our_body.transform.position = new Vector3(endgoal, our_body.transform.position.y, our_body.transform.position.z);
+                    is_moving = false;
                 }
             }
 
-            if (this.transform.eulerAngles.y == 270 && OurBody.transform.position.z >= endgoal)
+            if (this.transform.eulerAngles.y == 270 && our_body.transform.position.z >= endgoal)
             {
-                OurBody.transform.position += new Vector3(0, 0, -1 * speed * Time.deltaTime);
+                our_body.transform.position += new Vector3(0, 0, -1 * speed * Time.deltaTime);
 
-                if (OurBody.transform.position.z < endgoal)
+                if (our_body.transform.position.z < endgoal)
                 {
-                    OurBody.transform.position = new Vector3(OurBody.transform.position.x, OurBody.transform.position.y, endgoal);
-                    IsMoving = false;
+                    our_body.transform.position = new Vector3(our_body.transform.position.x, our_body.transform.position.y, endgoal);
+                    is_moving = false;
                 }
             }
         }
 
-        if (IsRotating)
+        if (is_rotating)
         {
             if (rotategoal < 90)
             {
@@ -168,7 +168,7 @@ public class Player_movement : MonoBehaviour
             }
             else if (rotategoal >= 90)
             {
-                IsRotating = false;
+                is_rotating = false;
 
                 if (new_direction == 0)
                 {

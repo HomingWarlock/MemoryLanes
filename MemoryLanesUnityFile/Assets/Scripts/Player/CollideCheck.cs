@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class CollideCheck : MonoBehaviour
 {
-    public Player_movement playerscript;
+    public Player_Movement player_script;
 
     void Start()
     {
-        playerscript = gameObject.GetComponentInParent(typeof(Player_movement)) as Player_movement;
+        player_script = gameObject.GetComponentInParent(typeof(Player_Movement)) as Player_Movement;
     }
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.transform.name == "CollideWall")
+        if (col.transform.name == "collidewall_group")
         {
-            playerscript.noMove = true;
+            player_script.no_move = true;
         }
     }
 
     public void OnTriggerExit(Collider col)
     {
-        if (col.transform.name == "CollideWall")
+        if (col.transform.name == "collidewall_group")
         {
-            playerscript.noMove = false;
+            player_script.no_move = false;
         }
     }
 }
