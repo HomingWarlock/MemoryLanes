@@ -23,9 +23,10 @@ public class SimonSays : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && !in_puzzle)
         {
-            if (player_script.current_tile == 1)
+            if (player_script.current_tile == 1 && player_script.transform.eulerAngles.y == 0)
             {
                 in_puzzle = true;
+                player_script.puzzle_lock = true;
                 main_camera.transform.position = new Vector3(simonsays_campoint.transform.position.x, simonsays_campoint.transform.position.y, simonsays_campoint.transform.position.z);
                 main_camera.transform.rotation = Quaternion.Euler(10, -90, 0);
             }
@@ -33,6 +34,7 @@ public class SimonSays : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && in_puzzle)
         {
             in_puzzle = false;
+            player_script.puzzle_lock = false;
             main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
             main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
         }
