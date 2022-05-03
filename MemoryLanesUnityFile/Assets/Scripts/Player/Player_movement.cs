@@ -15,6 +15,8 @@ public class Player_Movement : MonoBehaviour
     public float rotate_direction;
     public int new_direction;
     public bool no_move;
+    public GameObject collide_check;
+    public int current_tile;
 
     private void Awake()
     {
@@ -25,6 +27,9 @@ public class Player_Movement : MonoBehaviour
         our_body = this.GetComponent<Rigidbody>();
         distance = 5;
         no_move = false;
+        collide_check = transform.Find("collide_check").gameObject;
+        collide_check.SetActive(true);
+        current_tile = 5;
     }
 
     private void Update()
@@ -32,6 +37,7 @@ public class Player_Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.W) && !is_moving && !no_move && !is_rotating)
         {
             is_moving = true;
+            collide_check.SetActive(false);
 
             if (this.transform.eulerAngles.y == 0)
             {
@@ -62,22 +68,22 @@ public class Player_Movement : MonoBehaviour
         {
             if (this.transform.eulerAngles.y == 0)
             {
-                new_direction = -90;
+                new_direction = 90;
             }
 
-            if (this.transform.eulerAngles.y == -90)
+            if (this.transform.eulerAngles.y == 90)
             {
-                new_direction = -180;
+                new_direction = 180;
             }
 
-            if (this.transform.eulerAngles.y == -180)
+            if (this.transform.eulerAngles.y == 180)
             {
-                new_direction = -270;
+                new_direction = 270;
             }
 
-            if (this.transform.eulerAngles.y == -270)
+            if (this.transform.eulerAngles.y == 270)
             {
-                new_direction = -0;
+                new_direction = 0;
             }
 
             rotategoal = 0;
@@ -122,6 +128,7 @@ public class Player_Movement : MonoBehaviour
                 {
                     our_body.transform.position = new Vector3(endgoal, our_body.transform.position.y, our_body.transform.position.z);
                     is_moving = false;
+                    collide_check.SetActive(true);
                 }
             }
 
@@ -133,6 +140,7 @@ public class Player_Movement : MonoBehaviour
                 {
                     our_body.transform.position = new Vector3(our_body.transform.position.x, our_body.transform.position.y, endgoal);
                     is_moving = false;
+                    collide_check.SetActive(true);
                 }
             }
 
@@ -144,6 +152,7 @@ public class Player_Movement : MonoBehaviour
                 {
                     our_body.transform.position = new Vector3(endgoal, our_body.transform.position.y, our_body.transform.position.z);
                     is_moving = false;
+                    collide_check.SetActive(true);
                 }
             }
 
@@ -155,6 +164,7 @@ public class Player_Movement : MonoBehaviour
                 {
                     our_body.transform.position = new Vector3(our_body.transform.position.x, our_body.transform.position.y, endgoal);
                     is_moving = false;
+                    collide_check.SetActive(true);
                 }
             }
         }
@@ -170,23 +180,54 @@ public class Player_Movement : MonoBehaviour
             {
                 is_rotating = false;
 
-                if (new_direction == 0)
+                if (rotate_direction == 1)
                 {
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                    if (new_direction == 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                    }
+                    else if (new_direction == 90)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                    }
+                    else if (new_direction == 180)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
+                    else if (new_direction == 270)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 270, 0);
+                    }
                 }
-                else if (new_direction == 90)
+                else if (rotate_direction == -1)
                 {
-                    transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-                else if (new_direction == 180)
-                {
-                    transform.rotation = Quaternion.Euler(0, 180, 0);
-                }
-                else if (new_direction == 270)
-                {
-                    transform.rotation = Quaternion.Euler(0, 270, 0);
+                    if (new_direction == 0)
+                    {
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
+                    else if (new_direction == 90)
+                    {
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                    }
+                    else if (new_direction == 180)
+                    {
+                        transform.rotation = Quaternion.Euler(0, -0, 0);
+                    }
+                    else if (new_direction == 270)
+                    {
+                        transform.rotation = Quaternion.Euler(0, -270, 0);
+                    }
+
                 }
             }
+        }
+    }
+
+    public void OnTriggerEnter(Collider col)
+    {
+        if (col.transform.tag == "FloorTile" && !collide_check.activeSelf)
+        {
+            current_tile = int.Parse(col.transform.name[10] + "");
         }
     }
 }

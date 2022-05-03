@@ -13,7 +13,7 @@ public class CollideCheck : MonoBehaviour
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.transform.name == "collidewall_group")
+        if (col.transform.name == "collide_tile")
         {
             player_script.no_move = true;
         }
@@ -21,7 +21,7 @@ public class CollideCheck : MonoBehaviour
 
     public void OnTriggerExit(Collider col)
     {
-        if (col.transform.name == "collidewall_group")
+        if (col.transform.name == "collide_tile")
         {
             player_script.no_move = false;
         }
