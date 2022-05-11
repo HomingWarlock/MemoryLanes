@@ -22,6 +22,7 @@ public class SimonSays : MonoBehaviour
     public bool paper_falling;
     public bool paper_ready;
     public bool paper_collected;
+    public bool puzzle_exited;
 
     void Start()
     {
@@ -57,80 +58,91 @@ public class SimonSays : MonoBehaviour
         paper_falling = false;
         paper_ready = false;
         paper_collected = false;
+        puzzle_exited = false;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && !in_puzzle && !paper_falling)
+        if (!paper_collected)
         {
-            if (player_script.current_tile == 1 && player_script.transform.eulerAngles.y == 0)
+            if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && !in_puzzle && !paper_falling)
             {
-                in_puzzle = true;
-                player_turn = false;
-                is_flashing = false;
-                button_clicked = 99;
-                sequence_no = 0;
-                round_no = 0;
-                player_button_presses = 0;
-                player_script.puzzle_lock = true;
-                main_camera.transform.position = new Vector3(simonsays_campoint.transform.position.x, simonsays_campoint.transform.position.y, simonsays_campoint.transform.position.z);
-                main_camera.transform.rotation = Quaternion.Euler(0, -90, 0);
+                if (player_script.current_tile == 1 && player_script.transform.eulerAngles.y == 0)
+                {
+                    in_puzzle = true;
+                    player_turn = false;
+                    is_flashing = false;
+                    button_clicked = 99;
+                    sequence_no = 0;
+                    round_no = 0;
+                    player_button_presses = 0;
+                    player_script.puzzle_lock = true;
+                    main_camera.transform.position = new Vector3(simonsays_campoint.transform.position.x, simonsays_campoint.transform.position.y, simonsays_campoint.transform.position.z);
+                    main_camera.transform.rotation = Quaternion.Euler(0, -90, 0);
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && in_puzzle)
+            {
+                in_puzzle = false;
+                player_script.puzzle_lock = false;
+                main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
+                main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
+            }
+
+            if (in_puzzle)
+            {
+                if (!player_turn)
+                {
+                    if (round_no == 0 && !is_flashing)
+                    {
+                        if (sequence[sequence_no] == 99)
+                        {
+                            sequence[sequence_no] = Random.Range(0, 8);
+                        }
+
+                        button_objects[sequence[sequence_no]].GetComponent<Renderer>().material = button_flash;
+                        StartCoroutine(FlashDelay());
+                        is_flashing = true;
+                    }
+                }
+                else if (player_turn)
+                {
+                    if (round_no == 0)
+                    {
+                        if (button_clicked != 99)
+                        {
+                            if (button_clicked != sequence[sequence_no])
+                            {
+                                Debug.Log("Fail");
+                            }
+                            else if (button_clicked == sequence[sequence_no])
+                            {
+                                player_turn = false;
+                                button_clicked = 99;
+                                codepaper.SetActive(true);
+                                paper_falling = true;
+                                in_puzzle = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (paper_falling && !paper_collected && codepaper.transform.position.y >= 6.4f)
+            {
+                codepaper.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
+            }
+            else
+            {
+                paper_ready = true;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && in_puzzle)
+        else if (paper_collected && !puzzle_exited)
         {
-            in_puzzle = false;
+            puzzle_exited = true;
             player_script.puzzle_lock = false;
             main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
             main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
-        }
-
-        if (in_puzzle)
-        {
-            if (!player_turn)
-            {
-                if (round_no == 0 && !is_flashing)
-                {
-                    if (sequence[sequence_no] == 99)
-                    {
-                        sequence[sequence_no] = Random.Range(0, 8);
-                    }
-
-                    button_objects[sequence[sequence_no]].GetComponent<Renderer>().material = button_flash;
-                    StartCoroutine(FlashDelay());
-                    is_flashing = true;
-                }
-            }
-            else if (player_turn)
-            {
-                if (round_no == 0)
-                {
-                    if (button_clicked != 99)
-                    {
-                        if (button_clicked != sequence[sequence_no])
-                        {
-                            Debug.Log("Fail");
-                        }
-                        else if (button_clicked == sequence[sequence_no])
-                        {
-                            player_turn = false;
-                            button_clicked = 99;
-                            codepaper.SetActive(true);
-                            paper_falling = true;
-                            in_puzzle = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (paper_falling && !paper_collected && codepaper.transform.position.y >= 6.4f)
-        {
-            codepaper.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
-        }
-        else
-        {
-            paper_ready = true;
         }
     }
 

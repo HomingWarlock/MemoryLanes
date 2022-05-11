@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
+    public GameController game_script;
     public float speed;
     public float rotate_speed;
     public bool is_moving;
@@ -18,9 +19,13 @@ public class Player_Movement : MonoBehaviour
     public GameObject collide_check;
     public int current_tile;
     public bool puzzle_lock;
+    public bool final_move;
+    public bool final_call;
+    public bool do_once;
 
     private void Awake()
     {
+        game_script = GameObject.Find("game_controller").GetComponent<GameController>();
         speed = 2;
         rotate_speed = 200;
         is_moving = false;
@@ -32,6 +37,8 @@ public class Player_Movement : MonoBehaviour
         collide_check.SetActive(true);
         current_tile = 1;
         puzzle_lock = false;
+        final_call = false;
+        do_once = false;
     }
 
     private void Update()
@@ -225,14 +232,23 @@ public class Player_Movement : MonoBehaviour
                     }
                 }
             }
+
+            if (final_move && our_body.transform.position.x < 6.5f)
+            {
+                our_body.transform.position += new Vector3(1 * speed * Time.deltaTime, 0, 0);
+            }
+
+            if (final_move && final_call && !do_once)
+            {
+                do_once = true;
+                StartCoroutine(FinalDelay());
+            }
         }
     }
 
-    public void OnTriggerEnter(Collider col)
+    public IEnumerator FinalDelay()
     {
-        if (col.transform.tag == "FloorTile" && !collide_check.activeSelf)
-        {
-            current_tile = int.Parse(col.transform.name[10] + "");
-        }
+        yield return new WaitForSeconds(1);
+        game_script.is_final_screen = true;
     }
 }
