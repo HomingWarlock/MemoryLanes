@@ -18,6 +18,10 @@ public class SimonSays : MonoBehaviour
     public Material button_flash;
     public bool is_flashing;
     public int button_clicked;
+    public GameObject codepaper;
+    public bool paper_falling;
+    public bool paper_ready;
+    public bool paper_collected;
 
     void Start()
     {
@@ -48,11 +52,16 @@ public class SimonSays : MonoBehaviour
 
         is_flashing = false;
         button_clicked = 99;
+        codepaper = GameObject.Find("codepaper");
+        codepaper.SetActive(false);
+        paper_falling = false;
+        paper_ready = false;
+        paper_collected = false;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && !in_puzzle)
+        if (Input.GetKeyDown(KeyCode.E) && !player_script.is_moving && !player_script.is_rotating && !in_puzzle && !paper_falling)
         {
             if (player_script.current_tile == 1 && player_script.transform.eulerAngles.y == 0)
             {
@@ -106,11 +115,22 @@ public class SimonSays : MonoBehaviour
                         {
                             player_turn = false;
                             button_clicked = 99;
-                            Debug.Log("You Win");
+                            codepaper.SetActive(true);
+                            paper_falling = true;
+                            in_puzzle = false;
                         }
                     }
                 }
             }
+        }
+
+        if (paper_falling && !paper_collected && codepaper.transform.position.y >= 6.4f)
+        {
+            codepaper.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
+        }
+        else
+        {
+            paper_ready = true;
         }
     }
 
