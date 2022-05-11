@@ -28,8 +28,9 @@ public class SimonSays : MonoBehaviour
     {
         player_script = GameObject.Find("player").GetComponent<Player_Movement>();
         main_camera = GameObject.Find("main_camera");
-        main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
-        main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
+        main_camera.transform.parent = GameObject.Find("player").transform;
+        main_camera.transform.position = new Vector3(-5, 6.55f, 4.11f);
+        main_camera.transform.rotation = Quaternion.Euler(0, 270, 0);
         simonsays_campoint = GameObject.Find("simonsays_campoint").transform;
         in_puzzle = false;
         player_turn = false;
@@ -85,8 +86,8 @@ public class SimonSays : MonoBehaviour
             {
                 in_puzzle = false;
                 player_script.puzzle_lock = false;
-                main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
-                main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
+                main_camera.transform.position = new Vector3(-5, 6.55f, 4.11f);
+                main_camera.transform.rotation = Quaternion.Euler(0, 270, 0);
             }
 
             if (in_puzzle)
@@ -141,8 +142,8 @@ public class SimonSays : MonoBehaviour
         {
             puzzle_exited = true;
             player_script.puzzle_lock = false;
-            main_camera.transform.position = new Vector3(0, 6.5f, -12.5f);
-            main_camera.transform.rotation = Quaternion.Euler(-2, 1, 0);
+            main_camera.transform.position = new Vector3(-5, 6.55f, 4.11f);
+            main_camera.transform.rotation = Quaternion.Euler(0, 270, 0);
         }
     }
 
