@@ -30,7 +30,7 @@ public class Player_Movement : MonoBehaviour
         no_move = false;
         collide_check = transform.Find("collide_check").gameObject;
         collide_check.SetActive(true);
-        current_tile = 5;
+        current_tile = 1;
         puzzle_lock = false;
     }
 
